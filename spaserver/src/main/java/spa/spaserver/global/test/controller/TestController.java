@@ -45,7 +45,7 @@ public class TestController {
 
 	@GetMapping("/text")
 	public ResponseEntity<?> getText() {
-		return response.success("test CICD11","success",HttpStatus.OK);
+		return response.success("test CICD12","success",HttpStatus.OK);
 	}
 
 }
