@@ -1,6 +1,5 @@
 package spa.spaserver.member.dto;
 
-import io.swagger.annotations.ApiModel;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import lombok.Getter;
@@ -9,7 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 public class MemberRequestDto {
 
-	@ApiModel(value = "유저 로그인 DTO")
+
 	@Getter
 	@Setter
 	public static class SignUp {

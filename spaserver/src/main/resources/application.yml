@@ -1,14 +1,27 @@
 
 spring:
   profiles:
-    active: prod
-  redis:
-    host: ENC(CHXeT1pffOpImknDNtwIs3H6oIX1nCQJDSdECS5l6CO3d1oeao+Kbf58mNolyFxMFAqVYoavLlEXtAEq0kIEdQ==)
-    port: 6379
+    active: local
 
 jwt:
   secret: ENC(4hKFgzrCzw2rq7QmmvEK3NetjV7Cnuk+1ISkSmHI2RvINcQEowytV/YYS6bkn55/nTe8hkeCX34J633sh5rMcw==)
 
+springdoc:
+  version: v1
+  packages-to-scan: spa.spaserver
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: swagger-ui.html            # Swagger UI 경로 => localhost:8081/swagger-ui.html
+    tags-sorter: alpha            # alpha: 알파벳 순 태그 정렬, method: HTTP Method 순 정렬
+    operations-sorter: alpha      # alpha: 알파벳 순 태그 정렬, method: HTTP Method 순 정렬
+    doc-expansion: none
+  api-docs:
+    path: /api-docs/json
+    groups:
+      enabled: true
+  cache:
+    disabled: true
 ---
 
 spring:

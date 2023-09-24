@@ -2,6 +2,9 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  redis:
+    host: ENC(CHXeT1pffOpImknDNtwIs3H6oIX1nCQJDSdECS5l6CO3d1oeao+Kbf58mNolyFxMFAqVYoavLlEXtAEq0kIEdQ==)
+    port: 6379
 
   jpa:
     database: mysql
