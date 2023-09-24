@@ -2,3 +2,14 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+  jpa:
+    database: mysql
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: ENC(FVYIODljCyBHVNloRL13Q+XBUHH7TPsY9TQhr/7WFKWrBGoWkfGc1skh/n+PvEzG5EuEyo1LbPn5oT9+VTxp5HZyyhk4kanN977UonVVlv/oIK5yDHoHeg==)
+    username: ENC(QNp8kdkg5gU8n5ARu63fKDU4s11Q6nMb)
+    password: ENC(jsVFQ3UoASBnylefNO2mUtVMVzYcEsI+)
