@@ -1,4 +1,4 @@
-package spa.spaserver.global.member.domain;
+package spa.spaserver.member.domain;
 
 public enum Authority {
 	ROLE_USER,

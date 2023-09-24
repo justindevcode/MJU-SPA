@@ -1,4 +1,4 @@
-package spa.spaserver.global.global.config;
+package spa.spaserver.global.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;

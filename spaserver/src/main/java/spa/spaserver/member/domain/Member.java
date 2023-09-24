@@ -1,10 +1,9 @@
-package spa.spaserver.global.member.domain;
+package spa.spaserver.member.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -14,7 +13,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,6 +48,13 @@ public class Member extends BaseEntity implements UserDetails {
 	private String content;
 
 	private String oauth2Id;
+
+
+
+	//추가
+	private String memberId;
+
+	private String carNumber;
 
 
 //	@OneToMany(cascade = CascadeType.PERSIST)

@@ -1,4 +1,4 @@
-package spa.spaserver.global.global.config;
+package spa.spaserver.global.config;
 
 import com.ulisesbocchio.jasyptspringboot.configuration.EnableEncryptablePropertiesConfiguration;
 import org.jasypt.encryption.StringEncryptor;

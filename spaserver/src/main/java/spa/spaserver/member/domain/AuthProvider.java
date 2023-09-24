@@ -1,4 +1,4 @@
-package spa.spaserver.global.member.domain;
+package spa.spaserver.member.domain;
 
 import lombok.Getter;
 

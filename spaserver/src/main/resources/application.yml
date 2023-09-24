@@ -1,7 +1,13 @@
 
 spring:
   profiles:
-    active: local
+    active: prod
+  redis:
+    host: ENC(CHXeT1pffOpImknDNtwIs3H6oIX1nCQJDSdECS5l6CO3d1oeao+Kbf58mNolyFxMFAqVYoavLlEXtAEq0kIEdQ==)
+    port: 6379
+
+jwt:
+  secret: ENC(4hKFgzrCzw2rq7QmmvEK3NetjV7Cnuk+1ISkSmHI2RvINcQEowytV/YYS6bkn55/nTe8hkeCX34J633sh5rMcw==)
 
 ---
 
