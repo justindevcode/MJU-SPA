@@ -3,7 +3,7 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   redis:
-    host: 127.0.0.1
+    host: ENC(uLUqtuUMvM2O39Rk325+lx40jULQdYBm)
     #host: ENC(CHXeT1pffOpImknDNtwIs3H6oIX1nCQJDSdECS5l6CO3d1oeao+Kbf58mNolyFxMFAqVYoavLlEXtAEq0kIEdQ==)
     port: 6379
 
