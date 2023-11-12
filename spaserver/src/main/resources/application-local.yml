@@ -1,6 +1,6 @@
 spring:
   redis:
-    host: localhost
+    host: ENC(uLUqtuUMvM2O39Rk325+lx40jULQdYBm)
     port: 6379
 
   mvc:
