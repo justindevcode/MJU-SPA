@@ -39,6 +39,25 @@ public class MemberRequestDto {
 
 	@Getter
 	@Setter
+	public static class SocialSignUp {
+
+		@NotEmpty(message = "소셜 로그인 ID는 필수 입력값입니다.")
+		private String socialId;
+	}
+
+	@Getter
+	@Setter
+	public static class SocialLogin {
+		@NotEmpty(message = "소셜 로그인 ID는 필수 입력값입니다.")
+		private String socialId; // 소셜 로그인 고유 번호
+
+		public UsernamePasswordAuthenticationToken toAuthentication() {
+			return new UsernamePasswordAuthenticationToken(socialId, "");
+		}
+	}
+
+	@Getter
+	@Setter
 	public static class Reissue {
 		@NotEmpty(message = "accessToken 을 입력해주세요.")
 		private String accessToken;

@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spa.spaserver.global.lib.Helper;
-import spa.spaserver.member.domain.Member;
 import spa.spaserver.member.dto.MemberRequestDto;
 import spa.spaserver.member.dto.MemberRequestDto.SignUp;
+import spa.spaserver.member.dto.MemberRequestDto.SocialSignUp;
 import spa.spaserver.member.jwt.JwtTokenProvider;
 import spa.spaserver.member.service.MemberService;
 import spa.spaserver.global.test.dto.Response;
@@ -48,6 +48,25 @@ public class MemberController {
 			return response.invalidFields(Helper.refineErrors(errors));
 		}
 		return memberService.login(login);
+	}
+
+	@PostMapping("/social-sign-up")
+	public ResponseEntity<?> socialSignUp(@Validated @RequestBody SocialSignUp signUp, Errors errors) {
+		// validation check
+		if (errors.hasErrors()) {
+			return response.invalidFields(Helper.refineErrors(errors));
+		}
+
+		return memberService.socialSignUp(signUp);
+	}
+
+	@PostMapping("/social-login")
+	public ResponseEntity<?> socialLogin(@Validated @RequestBody MemberRequestDto.SocialLogin login, Errors errors) {
+		// validation check
+		if (errors.hasErrors()) {
+			return response.invalidFields(Helper.refineErrors(errors));
+		}
+		return memberService.socialLogin(login);
 	}
 
 	@PostMapping("/reissue")

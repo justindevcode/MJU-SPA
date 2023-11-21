@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import spa.spaserver.global.config.SecurityUtil;
+import spa.spaserver.member.domain.AuthProvider;
 import spa.spaserver.member.domain.Authority;
 import spa.spaserver.member.domain.Member;
 import spa.spaserver.member.dto.MemberRequestDto;
@@ -70,6 +71,52 @@ public class MemberService {
 		// 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
 		redisTemplate.opsForValue()
 			.set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+
+		return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
+	}
+
+	public ResponseEntity<?> socialSignUp(MemberRequestDto.SocialSignUp signUp) {
+		if (memberRepository.existsByEmail(signUp.getSocialId())) {
+			return response.fail("이미 회원가입된 소셜로그인 번호입니다.", HttpStatus.BAD_REQUEST);
+		}
+
+		Member member = Member.builder()
+			.email(signUp.getSocialId())
+			.password(passwordEncoder.encode(""))
+			.authProvider(AuthProvider.KAKAO)
+			.roles(Collections.singletonList(Authority.ROLE_USER.name()))
+			.build();
+		memberRepository.save(member);
+
+		return response.success("회원가입에 성공했습니다.");
+	}
+
+	public ResponseEntity<?> socialLogin(MemberRequestDto.SocialLogin login) {
+
+		System.out.println("test");
+		if (memberRepository.findByEmail(login.getSocialId()).orElse(null) == null) {
+			return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+		}
+
+		System.out.println("test2");
+
+		// 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
+		UsernamePasswordAuthenticationToken authenticationToken = login.toAuthentication();
+		System.out.println("test3");
+
+		// 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
+		// authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
+		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		System.out.println("test4");
+
+		// 3. 인증 정보를 기반으로 JWT 토큰 생성
+		MemberResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+		System.out.println("test5");
+
+		// 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
+		redisTemplate.opsForValue()
+			.set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+		System.out.println("test6");
 
 		return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
 	}
