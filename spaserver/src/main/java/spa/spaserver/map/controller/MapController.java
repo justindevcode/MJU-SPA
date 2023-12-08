@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spa.spaserver.global.lib.Helper;
 import spa.spaserver.global.test.dto.Response;
+import spa.spaserver.map.dto.ChargeRequestDto;
 import spa.spaserver.map.dto.MapRequestDto;
 import spa.spaserver.map.dto.MapResponseDto;
 import spa.spaserver.map.service.MapService;
@@ -31,6 +32,13 @@ public class MapController {
 	public ResponseEntity<?> getLocation(@RequestBody MapRequestDto mapRequestDto) {
 		MapResponseDto mapResponseDto = new MapResponseDto();
 		mapResponseDto.setLocation(mapService.main(mapRequestDto.getLocation()));
+		return  response.success(mapResponseDto, "위치좌표를 찾았습니다.", HttpStatus.OK);
+	}
+
+	@PostMapping("/charge")
+	private ResponseEntity<?> getCharge(@RequestBody ChargeRequestDto chargeRequestDto) {
+		MapResponseDto mapResponseDto = new MapResponseDto();
+		mapResponseDto.setLocation(mapService.chargeMain(chargeRequestDto));
 		return  response.success(mapResponseDto, "위치좌표를 찾았습니다.", HttpStatus.OK);
 	}
 

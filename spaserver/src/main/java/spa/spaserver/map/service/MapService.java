@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import spa.spaserver.map.dto.ChargeRequestDto;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,10 +41,31 @@ public class MapService {
 		return null;
 	}
 
+	public double[] chargeMain(ChargeRequestDto chargeRequestDto) {
+		try {
+			double[] coordinates = getCoordinatesFromKakaoMap(chargeRequestDto.getEndPoint());
+			String[] result = calculateMidpoint(chargeRequestDto.getStartY(),
+				chargeRequestDto.getStartX(), coordinates[0], coordinates[1]);
+			System.out.println("result = " + result[1] +"sdg"+ result[0]);
+			double[] chargeResult = getCoordinatesFromKakaoMap("전기차충전소", result);
+
+
+			if (coordinates != null) {
+
+
+				return chargeResult;
+			} else {
+				System.out.println("좌표를 찾을 수 없습니다.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	private static double[] getCoordinatesFromKakaoMap(String query) {
 		try {
 			String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?y=37.222451765&x=127.187139999&radius=20000&query=";
-			String encodedQuery = apiUrl + query;
+			String encodedQuery = apiUrl + query.replaceAll("\\s", "");
 
 			URI uri = new URI(encodedQuery);
 			HttpRequest request = HttpRequest.newBuilder()
@@ -76,6 +98,130 @@ public class MapService {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private static double[] getCoordinatesFromKakaoMap(String query, String[] baseLocation) {
+		try {
+			String[] regionNames = sendKakaoMapRequest(baseLocation[1], baseLocation[0]);
+
+//			String apiUrl =
+//				"https://dapi.kakao.com/v2/local/search/keyword.json?y=" + baseLocation[1] + "&x="
+//					+ baseLocation[0] + "&sort=distance&radius=" + baseLocation[2] + "&query=";
+			String apiUrl =
+				"https://dapi.kakao.com/v2/local/search/keyword.json?query="+regionNames[0]+regionNames[1]+"에있는";
+			String encodedQuery = apiUrl + query;
+			System.out.println("encodedQuery = " + encodedQuery);
+
+			URI uri = new URI(encodedQuery);
+			HttpRequest request = HttpRequest.newBuilder()
+				.uri(uri)
+				.header("Authorization", "KakaoAK " + REST_API_KEY)
+				.GET()
+				.build();
+
+
+
+			HttpClient client = HttpClient.newHttpClient();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			// JSON 파싱
+			JSONObject jsonResponse = new JSONObject(response.body());
+			JSONArray documents = jsonResponse.getJSONArray("documents");
+			System.out.println("이거맞나?????" +response.body());
+
+
+			// 첫 번째 검색 결과에서 x와 y 값을 추출
+			if (documents.length() > 0) {
+				JSONObject firstResult = documents.getJSONObject(0);
+				String x = firstResult.getString("x");
+				System.out.println(x + "x좌표값");
+				String y = firstResult.getString("y");
+
+				// String 값을 double로 변환하여 배열에 담아 리턴
+				return new double[]{Double.parseDouble(y), Double.parseDouble(x)};
+			}
+		} catch (IOException | URISyntaxException | InterruptedException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static String[] calculateMidpoint(String startLat, String startLng, double endLat, double endLng) {
+		System.out.println(
+			"startLat = " + startLat + ", startLng = " + startLng + ", endLat = " + endLat
+				+ ", endLng = " + endLng);
+		double startLatDouble = Double.parseDouble(startLat);
+		double startLngDouble = Double.parseDouble(startLng);
+		double endLatDouble = endLat;
+		double endLngDouble = endLng;
+
+		double midLat = (startLatDouble + endLatDouble) / 2;
+		double midLng;
+
+		if (Math.abs(startLngDouble - endLngDouble) < 180) {
+			midLng = (startLngDouble + endLngDouble) / 2;
+		} else {
+			midLng = (startLngDouble + endLngDouble + 360) / 2 - 360;
+		}
+
+		double distance = haversine(startLatDouble, startLngDouble, endLat, endLng);
+		int distanceInt = (int) Math.floor(distance);
+		return new String[]{String.valueOf(midLat), String.valueOf(midLng),String.valueOf(distanceInt)};
+	}
+	private static double haversine(double lat1, double lng1, double lat2, double lng2) {
+		final int R = 6371; // 지구 반지름 (단위: km)
+
+		double dLat = Math.toRadians(lat2 - lat1);
+		double dLng = Math.toRadians(lng2 - lng1);
+
+		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+			Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+				Math.sin(dLng / 2) * Math.sin(dLng / 2);
+
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+		return R * c * 1000; // 거리를 미터로 변환
+	}
+
+	public static String[] sendKakaoMapRequest(String latitude, String longitude) {
+		try {
+			String apiUrl = "https://dapi.kakao.com/v2/local/geo/coord2address.json?y="+longitude+"&x="+latitude;
+
+			URI uri = new URI(apiUrl);
+			HttpRequest request = HttpRequest.newBuilder()
+				.uri(uri)
+				.header("Authorization", "KakaoAK " + REST_API_KEY)
+				.GET()
+				.build();
+
+			HttpClient client = HttpClient.newHttpClient();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+			return parseKakaoMapResponse(response.body());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new String[0];
+	}
+
+	public static String[] parseKakaoMapResponse(String response) {
+		JSONObject jsonResponse = new JSONObject(response);
+		System.out.println(jsonResponse);
+		JSONArray documents = jsonResponse.getJSONArray("documents");
+
+		if (documents.length() > 0) {
+			JSONObject firstResult = documents.getJSONObject(0);
+
+			JSONObject roadAddress = firstResult.getJSONObject("road_address");
+			String region1DepthName = roadAddress.getString("region_1depth_name").replaceAll("\\s", "");
+			String region2DepthName = roadAddress.getString("region_2depth_name").replaceAll("\\s", "");
+			System.out.println("region2DepthName = " + region2DepthName);
+			System.out.println("region1DepthName = " + region1DepthName);
+
+			return new String[]{region1DepthName, region2DepthName};
+		}
+
+		return new String[0];
 	}
 
 }

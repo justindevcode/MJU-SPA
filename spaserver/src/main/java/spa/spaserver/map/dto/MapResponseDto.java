@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 public class MapResponseDto {
 
 	public void setLocation(double[] location) {
-		DecimalFormat decimalFormat = new DecimalFormat("#.######");
-		String stringValueX = decimalFormat.format(location[0]);
-		String stringValueY = decimalFormat.format(location[1]);
+		DecimalFormat decimalFormat = new DecimalFormat("#.################");
+		String stringValueX = decimalFormat.format(location[1]);
+		String stringValueY = decimalFormat.format(location[0]);
 		this.x = stringValueX;
 		this.y = stringValueY;
 	}
