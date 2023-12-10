@@ -25,9 +25,11 @@ public class MapService {
 
 	public double[] main(String search) {
 		String query = search;
+		log.info("프론트입력확인 {}", search);
 
 		try {
 			double[] coordinates = getCoordinatesFromKakaoMap(query);
+			log.info("서버결과확인 0번값 {}, 1번값", coordinates[0], coordinates[1]);
 			if (coordinates != null) {
 				System.out.println("위도: " + coordinates[0]);
 				System.out.println("경도: " + coordinates[1]);
