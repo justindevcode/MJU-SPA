@@ -214,7 +214,7 @@ public class MapService {
 		if (documents.length() > 0) {
 			JSONObject firstResult = documents.getJSONObject(0);
 
-			JSONObject roadAddress = firstResult.getJSONObject("road_address");
+			JSONObject roadAddress = firstResult.getJSONObject("address");
 			String region1DepthName = roadAddress.getString("region_1depth_name").replaceAll("\\s", "");
 			String region2DepthName = roadAddress.getString("region_2depth_name").replaceAll("\\s", "");
 			System.out.println("region2DepthName = " + region2DepthName);
