@@ -31,6 +31,7 @@ public class MapController {
 	@PostMapping("/location")
 	public ResponseEntity<?> getLocation(@RequestBody MapRequestDto mapRequestDto) {
 		MapResponseDto mapResponseDto = new MapResponseDto();
+		log.info("컨트롤러단 확인 {}", mapRequestDto.getLocation());
 		mapResponseDto.setLocation(mapService.main(mapRequestDto.getLocation()));
 		return  response.success(mapResponseDto, "위치좌표를 찾았습니다.", HttpStatus.OK);
 	}
