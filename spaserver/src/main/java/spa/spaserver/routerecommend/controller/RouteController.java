@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import spa.spaserver.routerecommend.dto.RouteRequestDto;
+import spa.spaserver.routerecommend.dto.RouteRequestDto2;
 import spa.spaserver.routerecommend.service.RouteService;
 
 @Slf4j
@@ -23,7 +23,7 @@ public class RouteController {
 	private final RouteService routeService;
 
 	@PostMapping("/newRoute")
-	public ResponseEntity<?> newRoute(@RequestBody RouteRequestDto newRoute ,
+	public ResponseEntity<?> newRoute(@RequestBody RouteRequestDto2 newRoute ,
 		@Parameter(hidden = true) @AuthenticationPrincipal UserDetails member) {
 		return routeService.saveRoute(newRoute, member);
 	}

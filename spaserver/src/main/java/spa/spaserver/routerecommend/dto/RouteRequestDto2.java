@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class RouteRequestDto {
+public class RouteRequestDto2 {
 	private String routeCount;
 	private String routeCoordinate;
 	private String start;

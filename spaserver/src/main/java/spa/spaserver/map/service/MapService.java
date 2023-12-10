@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import spa.spaserver.map.dto.ChargeRequestDto;
+import spa.spaserver.map.dto.RouteRequestDto;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -224,6 +225,193 @@ public class MapService {
 		}
 
 		return new String[0];
+	}
+
+	public String routePrint(RouteRequestDto routeRequestDto) {
+		StringBuilder stringBuilder = new StringBuilder();
+
+		if (routeRequestDto.getBattery() <= 25) {
+			stringBuilder.append("[stop 1] \n");
+			stringBuilder.append("출발: 명지대학교 \n");
+			stringBuilder.append("도착: 명지대학교 충전소 \n");
+			stringBuilder.append("이동거리: 0.00km \n");
+			stringBuilder.append("소요시간: " + (double)routeRequestDto.getBattery()/100*1.2 +"시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[stop 2] \n");
+			stringBuilder.append("출발: 명지대학교 충전소 \n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation1() + "\n");
+			stringBuilder.append("이동거리: " + routeRequestDto.getTime1()*42 +"Km \n");
+			stringBuilder.append("소요시간: " + routeRequestDto.getTime1() + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[stop 3] \n");
+			stringBuilder.append("출발: " + routeRequestDto.getLocation1() + "\n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation2() + "\n");
+			stringBuilder.append("이동거리: " + routeRequestDto.getTime2()*45 +"Km \n");
+			stringBuilder.append("소요시간: " + routeRequestDto.getTime2() + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[stop 4] \n");
+			stringBuilder.append("출발: " + routeRequestDto.getLocation2() + "\n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation3() + "\n");
+			stringBuilder.append("이동거리: " + routeRequestDto.getTime3()*45 +"Km \n");
+			stringBuilder.append("소요시간: " + routeRequestDto.getTime3() + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[경로 종합 정보] \n");
+			stringBuilder.append(
+				"총 이동거리:" + (routeRequestDto.getTime1() * 42 + routeRequestDto.getTime2() * 45
+					+ routeRequestDto.getTime3() * 45) + "km \n");
+			stringBuilder.append(
+				"총 소요시간: " + Math.round((routeRequestDto.getTime1() + routeRequestDto.getTime2()
+					+ routeRequestDto.getTime3() + ((double) routeRequestDto.getBattery() / 100 * 1.2))*100.0)/100.0
+					+ "시간 경유시간 포함 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append(
+				"최종점수 : " + (routeRequestDto.getTime1() * 42 + routeRequestDto.getTime2() * 45
+					+ routeRequestDto.getTime3() * 45) * (-1100)
+					+ Math.round((routeRequestDto.getTime1() + routeRequestDto.getTime2()
+					+ routeRequestDto.getTime3()
+					+ (((double) routeRequestDto.getBattery() / 100 * 1.2)) * 100.0) / 100.0)
+					* (-2500) + 80 * (500) + "\n");
+
+			String result = stringBuilder.toString();
+			System.out.println(result);
+			return result;
+		} else if (routeRequestDto.getBattery() <= 50) {
+			stringBuilder.append("[stop 1] \n");
+			stringBuilder.append("출발: 명지대학교 충전소 \n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation1() + "\n");
+			stringBuilder.append("이동거리: " + routeRequestDto.getTime1()*42 +"Km \n");
+			stringBuilder.append("소요시간: " + routeRequestDto.getTime1() + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[stop 2] \n");
+			stringBuilder.append("출발: " + routeRequestDto.getLocation1() + " \n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation1() + " 충전소 \n");
+			stringBuilder.append("이동거리: 0.00km \n");
+			stringBuilder.append("소요시간: " + (double)(routeRequestDto.getBattery()-20)/100*1.2 + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[stop 3] \n");
+			stringBuilder.append("출발: " + routeRequestDto.getLocation1() + "\n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation2() + "\n");
+			stringBuilder.append("이동거리: " + routeRequestDto.getTime2()*45 +"Km \n");
+			stringBuilder.append("소요시간: " + routeRequestDto.getTime2() + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[stop 4] \n");
+			stringBuilder.append("출발: " + routeRequestDto.getLocation2() + "\n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation3() + "\n");
+			stringBuilder.append("이동거리: " + routeRequestDto.getTime3()*45 +"Km \n");
+			stringBuilder.append("소요시간: " + routeRequestDto.getTime3() + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[경로 종합 정보] \n");
+			stringBuilder.append(
+				"총 이동거리:" + (routeRequestDto.getTime1() * 42 + routeRequestDto.getTime2() * 45
+					+ routeRequestDto.getTime3() * 45) + "km \n");
+			stringBuilder.append(
+				"총 소요시간: " + Math.round((routeRequestDto.getTime1() + routeRequestDto.getTime2()
+					+ routeRequestDto.getTime3() + (((double) routeRequestDto.getBattery()-20) / 100 * 1.2))*100.0)/100.0
+					+ "시간 경유시간 포함 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append(
+				"최종점수 : " + (routeRequestDto.getTime1() * 42 + routeRequestDto.getTime2() * 45
+					+ routeRequestDto.getTime3() * 45) * (-1100)
+					+ Math.round((routeRequestDto.getTime1() + routeRequestDto.getTime2()
+					+ routeRequestDto.getTime3()
+					+ (((double) (routeRequestDto.getBattery()-20) / 100 * 1.2)) * 100.0) / 100.0)
+					* (-2500) + 80 * (500) + "\n");
+
+			String result = stringBuilder.toString();
+			System.out.println(result);
+			return result;
+		} else if (routeRequestDto.getBattery() <= 75) {
+			stringBuilder.append("[stop 1] \n");
+			stringBuilder.append("출발: 명지대학교 충전소 \n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation1() + "\n");
+			stringBuilder.append("이동거리: " + routeRequestDto.getTime1()*42 +"Km \n");
+			stringBuilder.append("소요시간: " + routeRequestDto.getTime1() + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[stop 2] \n");
+			stringBuilder.append("출발: " + routeRequestDto.getLocation1() + "\n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation2() + "\n");
+			stringBuilder.append("이동거리: " + routeRequestDto.getTime2()*45 +"Km \n");
+			stringBuilder.append("소요시간: " + routeRequestDto.getTime2() + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[stop 3] \n");
+			stringBuilder.append("출발: " + routeRequestDto.getLocation2() + " \n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation2() + " 충전소 \n");
+			stringBuilder.append("이동거리: 0.00km \n");
+			stringBuilder.append("소요시간: " + (double)(routeRequestDto.getBattery()-50)/100*1.2 + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[stop 4] \n");
+			stringBuilder.append("출발: " + routeRequestDto.getLocation2() + "\n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation3() + "\n");
+			stringBuilder.append("이동거리: " + routeRequestDto.getTime3()*45 +"Km \n");
+			stringBuilder.append("소요시간: " + routeRequestDto.getTime3() + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[경로 종합 정보] \n");
+			stringBuilder.append(
+				"총 이동거리:" + (routeRequestDto.getTime1() * 42 + routeRequestDto.getTime2() * 45
+					+ routeRequestDto.getTime3() * 45) + "km \n");
+			stringBuilder.append(
+				"총 소요시간: " + Math.round((routeRequestDto.getTime1() + routeRequestDto.getTime2()
+					+ routeRequestDto.getTime3() + (((double) routeRequestDto.getBattery()-50) / 100 * 1.2))*100.0)/100.0
+					+ "시간 경유시간 포함 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append(
+				"최종점수 : " + (routeRequestDto.getTime1() * 42 + routeRequestDto.getTime2() * 45
+					+ routeRequestDto.getTime3() * 45) * (-1100)
+					+ Math.round((routeRequestDto.getTime1() + routeRequestDto.getTime2()
+					+ routeRequestDto.getTime3()
+					+ (((double) (routeRequestDto.getBattery()-50) / 100 * 1.2)) * 100.0) / 100.0)
+					* (-2500) + 80 * (500) + "\n");
+
+			String result = stringBuilder.toString();
+			System.out.println(result);
+			return result;
+		} else if (routeRequestDto.getBattery() <= 100) {
+			stringBuilder.append("[stop 1] \n");
+			stringBuilder.append("출발: 명지대학교 충전소 \n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation1() + "\n");
+			stringBuilder.append("이동거리: " + routeRequestDto.getTime1()*42 +"Km \n");
+			stringBuilder.append("소요시간: " + routeRequestDto.getTime1() + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[stop 2] \n");
+			stringBuilder.append("출발: " + routeRequestDto.getLocation1() + "\n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation2() + "\n");
+			stringBuilder.append("이동거리: " + routeRequestDto.getTime2()*45 +"Km \n");
+			stringBuilder.append("소요시간: " + routeRequestDto.getTime2() + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[stop 3] \n");
+			stringBuilder.append("출발: " + routeRequestDto.getLocation2() + "\n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation3() + "\n");
+			stringBuilder.append("이동거리: " + routeRequestDto.getTime3()*45 +"Km \n");
+			stringBuilder.append("소요시간: " + routeRequestDto.getTime3() + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[stop 4] \n");
+			stringBuilder.append("출발: " + routeRequestDto.getLocation3() + " \n");
+			stringBuilder.append("도착: " + routeRequestDto.getLocation3() + " 충전소 \n");
+			stringBuilder.append("이동거리: 0.00km \n");
+			stringBuilder.append("소요시간: " + (double)(routeRequestDto.getBattery()-75)/100*1.2 + "시간 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append("[경로 종합 정보] \n");
+			stringBuilder.append(
+				"총 이동거리:" + (routeRequestDto.getTime1() * 42 + routeRequestDto.getTime2() * 45
+					+ routeRequestDto.getTime3() * 45) + "km \n");
+			stringBuilder.append(
+				"총 소요시간: " + Math.round((routeRequestDto.getTime1() + routeRequestDto.getTime2()
+					+ routeRequestDto.getTime3() + (((double) routeRequestDto.getBattery()-75) / 100 * 1.2))*100.0)/100.0
+					+ "시간 경유시간 포함 \n");
+			stringBuilder.append("\n");
+			stringBuilder.append(
+				"최종점수 : " + (routeRequestDto.getTime1() * 42 + routeRequestDto.getTime2() * 45
+					+ routeRequestDto.getTime3() * 45) * (-1100)
+					+ Math.round((routeRequestDto.getTime1() + routeRequestDto.getTime2()
+					+ routeRequestDto.getTime3()
+					+ (((double) (routeRequestDto.getBattery()-75) / 100 * 1.2)) * 100.0) / 100.0)
+					* (-2500) + 80 * (500) + "\n");
+
+			String result = stringBuilder.toString();
+			System.out.println(result);
+			return result;
+		}
+		return null;
 	}
 
 }
