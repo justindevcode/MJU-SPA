@@ -4,6 +4,9 @@
 
 사설 주차장서비스와 목적지사이 가장 효율적인 전기차 충전소를 제공하는 네비게이션 서비스가 있는 프로젝트 입니다.  
 
+### Period : 2023/09/08 ~ 2023/12/14
+### Stacks : Java, Spring, JPA, mysql, Redis, Docker, Jenkins
+
 # :page_facing_up: Souce Code
 https://github.com/orgs/MJU-SPA/repositories  
 
